@@ -30,4 +30,8 @@ public class Contract {
     private Double deposit;
     private String contractPath;
 
+    public Contract(LocalDate endDate, Double monthlyRent) {
+        this.endDate = endDate;
+        this.monthlyRent = monthlyRent;
+    }
 }

@@ -33,13 +33,21 @@ public class ContractService {
                 .orElseThrow(() -> new EntityNotFoundException("Contract not found with id: " + id));
     }
 
+    public Contract addContractEndDate(Long id, String endDate) {
+        Contract existingContract = getContractById(id);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(endDate, formatter);
+        existingContract.setEndDate(localDate);
+        return saveContract(existingContract);
+    }
+
     public Contract saveContract(Contract contract) {
         return contractRepository.save(contract);
     }
 
     public void addNewContract(ContractDto contractDto) {
         try {
-            // Validate contractDto properties
+            // Check if new contract has tenant name and start date
             if (contractDto.getTenantName() == null || contractDto.getStartDate() == null) {
                 throw new IllegalArgumentException("Tenant name and start date are required");
             }
@@ -70,7 +78,8 @@ public class ContractService {
 
     public Double showTotalMonthlyRentIncome() {
         return contractRepository.findAll().stream()
-                .filter(contract -> contract.getEndDate() == null) // Only active contracts
+                .filter(contract -> contract.getEndDate() == null)// Only active contracts
+                .filter(contract -> contract.getMonthlyRent() > 0)
                 .mapToDouble(Contract::getMonthlyRent)
                 .sum();
     }

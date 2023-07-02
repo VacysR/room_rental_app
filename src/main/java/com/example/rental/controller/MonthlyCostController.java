@@ -4,7 +4,6 @@ import com.example.rental.model.MonthlyCost;
 import com.example.rental.service.MonthlyCostService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @AllArgsConstructor
